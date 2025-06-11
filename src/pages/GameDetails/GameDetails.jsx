@@ -7,6 +7,8 @@ const GameDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [game, setGame] = useState(null);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     const foundGame = getGameById(id);
@@ -25,14 +27,13 @@ const GameDetails = () => {
   const handleUpdate = (e) => {
     e.preventDefault();
     updateGame(game);
-    navigate("/");
+    setShowSuccess(true);
+    setTimeout(() => setShowSuccess(false), 2000);
   };
 
   const handleDelete = () => {
-    if (window.confirm("Are you sure you want to delete this game?")) {
-      removeGame(id);
-      navigate("/");
-    }
+    removeGame(id);
+    navigate("/");
   };
 
   if (!game) return <p>Loading...</p>;
@@ -81,11 +82,29 @@ const GameDetails = () => {
           onChange={handleChange}
         />
 
+        {showSuccess && <p className="success-msg">Changes saved successfully!</p>}
+
         <div className="actions">
-          <button type="submit" className="edit">Save Changes</button>
-          <button type="button" className="delete" onClick={handleDelete}>Delete</button>
+          <button type="button" className="delete" onClick={() => setShowModal(true)}>
+            Delete
+          </button>
+          <button type="submit" className="edit">
+            Save Changes
+          </button>
         </div>
       </form>
+
+      {showModal && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <p>Are you sure you want to delete this game?</p>
+            <div className="modal-actions">
+              <button className="confirm" onClick={handleDelete}>Yes, delete</button>
+              <button className="cancel" onClick={() => setShowModal(false)}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
