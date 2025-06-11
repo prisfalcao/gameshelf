@@ -1,7 +1,7 @@
 // src/pages/GameDetails.jsx
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { getGameById, updateGame, removeGame } from "../utils/storage";
+import { getGameById, updateGame, removeGame } from "../../utils/storage";
 
 const GameDetails = () => {
   const { id } = useParams();

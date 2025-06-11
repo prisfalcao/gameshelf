@@ -1,7 +1,7 @@
 // src/pages/AddGame.jsx
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { addGame } from "../utils/storage";
+import { addGame } from "../../utils/storage";
 import { v4 as uuidv4 } from "uuid";
 
 const AddGame = () => {
