@@ -1,7 +1,7 @@
-// src/pages/GameDetails.jsx
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { getGameById, updateGame, removeGame } from "../../utils/storage";
+import "./GameDetails.scss";
 
 const GameDetails = () => {
   const { id } = useParams();
@@ -29,17 +29,17 @@ const GameDetails = () => {
   };
 
   const handleDelete = () => {
-  if (window.confirm("Are you sure you want to delete this game?")) {
-    removeGame(id);
-    navigate("/");
-  }
-};
+    if (window.confirm("Are you sure you want to delete this game?")) {
+      removeGame(id);
+      navigate("/");
+    }
+  };
 
   if (!game) return <p>Loading...</p>;
 
   return (
-    <div className="game-details">
-      <h1>Edit Game</h1>
+    <div className="game-details-container">
+      <h1>Game Details</h1>
       <form onSubmit={handleUpdate}>
         <label>Title:</label>
         <input
@@ -65,14 +65,26 @@ const GameDetails = () => {
           <option value="abandoned">Abandoned</option>
         </select>
 
-        <button type="submit">Save Changes</button>
-        <button
-          type="button"
-          onClick={handleDelete}
-          style={{ marginLeft: "10px", backgroundColor: "#e74c3c", color: "#fff" }}
-        >
-          Delete
-        </button>
+        <label>Platform:</label>
+        <input
+          type="text"
+          name="platform"
+          value={game.platform || ""}
+          onChange={handleChange}
+        />
+
+        <label>Release Year:</label>
+        <input
+          type="number"
+          name="year"
+          value={game.year || ""}
+          onChange={handleChange}
+        />
+
+        <div className="actions">
+          <button type="submit" className="edit">Save Changes</button>
+          <button type="button" className="delete" onClick={handleDelete}>Delete</button>
+        </div>
       </form>
     </div>
   );

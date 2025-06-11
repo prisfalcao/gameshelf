@@ -1,4 +1,3 @@
-// src/pages/AddGame.jsx
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { addGame } from "../../utils/storage";
