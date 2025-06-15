@@ -63,6 +63,8 @@ const GameDetails = () => {
     }
 
     updateGame({ ...game, ...values });
+    const updatedGame = getGameById(id);
+    setGame(updatedGame);
     setIsEditing(false);
     setShowSuccess(true);
     setTimeout(() => setShowSuccess(false), 2000);
