@@ -1,6 +1,8 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { getGameById, updateGame, removeGame, getGames } from "../../utils/storage";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
 import CustomButton from "../../components/Button/Button";
 import Modal from "../../components/Modal/Modal";
 import "./GameDetails.scss";
@@ -23,33 +25,44 @@ const GameDetails = () => {
     }
   }, [id, navigate]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setGame({ ...game, [name]: value });
-  };
+  const validationSchema = Yup.object({
+    title: Yup.string().required("Title is required").max(100),
+    cover: Yup.string()
+      .required("Cover URL is required")
+      .test(
+        "is-valid-cover",
+        "Must be a valid URL or a valid base64 image",
+        (value) =>
+          /^https?:\/\//.test(value) || /^data:image\/[a-z]+;base64,/.test(value)
+      ),
+    platform: Yup.string().required("Platform is required"),
+    status: Yup.string().required("Status is required"),
+    releaseYear: Yup.number()
+      .typeError("Release Year must be a number")
+      .required("Release Year is required")
+      .min(1970, "Year must be after 1970")
+      .max(new Date().getFullYear(), `Year cannot be after ${new Date().getFullYear()}`),
+    startDate: Yup.date()
+      .required("Start Date is required")
+      .max(new Date(), "Start Date cannot be in the future"),
+  });
 
-  const handleUpdate = (e) => {
-    e.preventDefault();
-    if (!game.title || !game.cover || !game.platform || !game.releaseYear || game.platform === "") {
-      alert("Fill all the mandatory fields.");
-      return;
-    };
-
+  const handleUpdate = (values, { setSubmitting }) => {
     const existingGames = getGames();
-
     const alreadyExists = existingGames.some(
       (g) =>
         g.id !== game.id &&
-        g.title.toLowerCase().trim() === game.title.toLowerCase().trim() &&
-        g.platform.toLowerCase().trim() === game.platform.toLowerCase().trim()
+        g.title.toLowerCase().trim() === values.title.toLowerCase().trim() &&
+        g.platform.toLowerCase().trim() === values.platform.toLowerCase().trim()
     );
 
     if (alreadyExists) {
       setShowErrorModal(true);
+      setSubmitting(false);
       return;
     }
 
-    updateGame(game);
+    updateGame({ ...game, ...values });
     setIsEditing(false);
     setShowSuccess(true);
     setTimeout(() => setShowSuccess(false), 2000);
@@ -82,7 +95,6 @@ const GameDetails = () => {
                 ? game.startDate.split("-").reverse().join("/")
                 : "Not started yet"}
             </p>
-
           </div>
 
           <div className="actions">
@@ -95,71 +107,85 @@ const GameDetails = () => {
           </div>
         </div>
       ) : (
-        <form onSubmit={handleUpdate} className="edit-form">
-          <label>Title:</label>
-          <input
-            type="text"
-            name="title"
-            value={game.title}
-            onChange={handleChange}
-          />
+        <Formik
+          initialValues={{
+            title: game.title,
+            cover: game.cover,
+            status: game.status,
+            platform: game.platform,
+            releaseYear: game.releaseYear,
+            startDate: game.startDate || "",
+          }}
+          validationSchema={validationSchema}
+          onSubmit={handleUpdate}
+        >
+          {({ isSubmitting }) => (
+            <Form className="edit-form">
+              <label>Title:</label>
+              <Field type="text" name="title" />
+              <ErrorMessage name="title" component="div" className="error-message" />
 
-          <label>Cover URL:</label>
-          <input
-            type="url"
-            name="cover"
-            value={game.cover}
-            onChange={handleChange}
-          />
+              <label>Cover URL:</label>
+              <Field type="text" name="cover" />
+              <ErrorMessage name="cover" component="div" className="error-message" />
 
-          <label>Status:</label>
-          <select name="status" value={game.status} onChange={handleChange}>
-            <option value="Want to play">Want to Play</option>
-            <option value="Playing">Playing</option>
-            <option value="Played">Played</option>
-            <option value="Abandoned">Abandoned</option>
-          </select>
+              <label>Status:</label>
+              <Field as="select" name="status">
+                <option value="Want to play">Want to Play</option>
+                <option value="Playing">Playing</option>
+                <option value="Played">Played</option>
+                <option value="Abandoned">Abandoned</option>
+              </Field>
+              <ErrorMessage name="status" component="div" className="error-message" />
 
-          <label>Platform:</label>
-          <select name="platform" value={game.platform || ""} onChange={handleChange}>
-            <option value="">Select Platform</option>
-            <option value="Xbox One">Xbox One</option>
-            <option value="Xbox Series X">Xbox Series X</option>
-            <option value="PlayStation 3">PlayStation 3</option>
-            <option value="PlayStation 4">PlayStation 4</option>
-            <option value="PlayStation 5">PlayStation 5</option>
-            <option value="SNES">SNES</option>
-            <option value="Nintendo Game Boy">Nintendo Game Boy</option>
-            <option value="Nintendo Switch">Nintendo Switch</option>
-            <option value="Nintendo Switch 2">Nintendo Switch 2</option>
-            <option value="PC">PC</option>
-            <option value="Other">Other</option>
-          </select>
+              <label>Platform:</label>
+              <Field as="select" name="platform">
+                <option value="">Select Platform</option>
+                <option value="Xbox One">Xbox One</option>
+                <option value="Xbox Series X">Xbox Series X</option>
+                <option value="PlayStation 3">PlayStation 3</option>
+                <option value="PlayStation 4">PlayStation 4</option>
+                <option value="PlayStation 5">PlayStation 5</option>
+                <option value="SNES">SNES</option>
+                <option value="Nintendo Game Boy">Nintendo Game Boy</option>
+                <option value="Nintendo Switch">Nintendo Switch</option>
+                <option value="Nintendo Switch 2">Nintendo Switch 2</option>
+                <option value="PC">PC</option>
+                <option value="Other">Other</option>
+              </Field>
+              <ErrorMessage name="platform" component="div" className="error-message" />
 
-          <label>Release Year:</label>
-          <input
-            type="number"
-            name="releaseYear"
-            min="1970"
-            max={new Date().getFullYear()}
-            value={game.releaseYear || ""}
-            onChange={handleChange}
-          />
+              <label>Release Year:</label>
+              <Field
+                type="number"
+                name="releaseYear"
+                min="1970"
+                max={new Date().getFullYear()}
+                onInput={(e) => {
+                  if (e.target.value.length > 4) {
+                    e.target.value = e.target.value.slice(0, 4);
+                  }
+                }}
+              />
+              <ErrorMessage name="releaseYear" component="div" className="error-message" />
 
-          <label>Start Date:</label>
-          <input
-            type="date"
-            name="startDate"
-            max={new Date().toISOString().split("T")[0]}
-            value={game.startDate || ""}
-            onChange={handleChange}
-          />
+              <ErrorMessage name="releaseYear" component="div" className="error-message" />
 
-          <div className="actions">
-            <button type="submit" className="edit">Save Changes</button>
-            <button type="button" className="cancel" onClick={() => setIsEditing(false)}>Cancel</button>
-          </div>
-        </form>
+              <label>Start Date:</label>
+              <Field type="date" name="startDate" />
+              <ErrorMessage name="startDate" component="div" className="error-message" />
+
+              <div className="actions">
+                <CustomButton type="submit" variant="primary" disabled={isSubmitting}>
+                  Save Changes
+                </CustomButton>
+                <CustomButton type="button" variant="secondary" onClick={() => setIsEditing(false)}>
+                  Cancel
+                </CustomButton>
+              </div>
+            </Form>
+          )}
+        </Formik>
       )}
 
       {showDeleteConfirm && (
