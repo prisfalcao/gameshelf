@@ -1,6 +1,8 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { getGameById, updateGame, removeGame } from "../../utils/storage";
+import { getGameById, updateGame, removeGame, getGames } from "../../utils/storage";
+import CustomButton from "../../components/Button/Button";
+import Modal from "../../components/Modal/Modal";
 import "./GameDetails.scss";
 
 const GameDetails = () => {
@@ -10,6 +12,7 @@ const GameDetails = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
 
   useEffect(() => {
     const foundGame = getGameById(id);
@@ -27,6 +30,25 @@ const GameDetails = () => {
 
   const handleUpdate = (e) => {
     e.preventDefault();
+    if (!game.title || !game.cover || !game.platform || !game.releaseYear || game.platform === "") {
+      alert("Fill all the mandatory fields.");
+      return;
+    };
+
+    const existingGames = getGames();
+
+    const alreadyExists = existingGames.some(
+      (g) =>
+        g.id !== game.id &&
+        g.title.toLowerCase().trim() === game.title.toLowerCase().trim() &&
+        g.platform.toLowerCase().trim() === game.platform.toLowerCase().trim()
+    );
+
+    if (alreadyExists) {
+      setShowErrorModal(true);
+      return;
+    }
+
     updateGame(game);
     setIsEditing(false);
     setShowSuccess(true);
@@ -42,7 +64,7 @@ const GameDetails = () => {
 
   return (
     <div className="game-details-container">
-      <h1>Game Details</h1>
+      <h1>Game details</h1>
 
       {showSuccess && <p className="success-message">Game updated successfully!</p>}
 
@@ -53,12 +75,23 @@ const GameDetails = () => {
             <p>Title: {game.title}</p>
             <p>Status: {game.status}</p>
             <p>Platform: {game.platform}</p>
-            <p>Release Year: {game.release_year}</p>
+            <p>Release Year: {game.releaseYear}</p>
+            <p>
+              Start Date:{" "}
+              {game.startDate
+                ? game.startDate.split("-").reverse().join("/")
+                : "Not started yet"}
+            </p>
+
           </div>
 
           <div className="actions">
-            <button className="edit" onClick={() => setIsEditing(true)}>Edit Game</button>
-            <button className="delete" onClick={() => setShowDeleteConfirm(true)}>Delete</button>
+            <CustomButton onClick={() => setIsEditing(true)} variant="primary">
+              Edit game
+            </CustomButton>
+            <CustomButton onClick={() => setShowDeleteConfirm(true)} variant="danger">
+              Delete
+            </CustomButton>
           </div>
         </div>
       ) : (
@@ -81,10 +114,10 @@ const GameDetails = () => {
 
           <label>Status:</label>
           <select name="status" value={game.status} onChange={handleChange}>
-            <option value="want to play">Want to Play</option>
-            <option value="playing">Playing</option>
-            <option value="played">Played</option>
-            <option value="abandoned">Abandoned</option>
+            <option value="Want to play">Want to Play</option>
+            <option value="Playing">Playing</option>
+            <option value="Played">Played</option>
+            <option value="Abandoned">Abandoned</option>
           </select>
 
           <label>Platform:</label>
@@ -92,18 +125,33 @@ const GameDetails = () => {
             <option value="">Select Platform</option>
             <option value="Xbox One">Xbox One</option>
             <option value="Xbox Series X">Xbox Series X</option>
+            <option value="PlayStation 3">PlayStation 3</option>
             <option value="PlayStation 4">PlayStation 4</option>
             <option value="PlayStation 5">PlayStation 5</option>
+            <option value="SNES">SNES</option>
+            <option value="Nintendo Game Boy">Nintendo Game Boy</option>
             <option value="Nintendo Switch">Nintendo Switch</option>
+            <option value="Nintendo Switch 2">Nintendo Switch 2</option>
             <option value="PC">PC</option>
             <option value="Other">Other</option>
           </select>
 
           <label>Release Year:</label>
           <input
+            type="number"
+            name="releaseYear"
+            min="1970"
+            max={new Date().getFullYear()}
+            value={game.releaseYear || ""}
+            onChange={handleChange}
+          />
+
+          <label>Start Date:</label>
+          <input
             type="date"
-            name="year"
-            value={game.year || ""}
+            name="startDate"
+            max={new Date().toISOString().split("T")[0]}
+            value={game.startDate || ""}
             onChange={handleChange}
           />
 
@@ -115,15 +163,21 @@ const GameDetails = () => {
       )}
 
       {showDeleteConfirm && (
-        <div className="modal">
-          <div className="modal-content">
-            <p>Are you sure you want to delete this game?</p>
-            <div className="modal-actions">
-              <button className="delete" onClick={handleDelete}>Yes, Delete</button>
-              <button className="cancel" onClick={() => setShowDeleteConfirm(false)}>Cancel</button>
-            </div>
-          </div>
-        </div>
+        <Modal
+          message="Are you sure you want to delete this game?"
+          onConfirm={handleDelete}
+          onCancel={() => setShowDeleteConfirm(false)}
+          confirmText="Yes, Delete"
+          cancelText="Cancel"
+          showCancel={true}
+        />
+      )}
+
+      {showErrorModal && (
+        <Modal
+          message="This game already exists on the shelf for this platform."
+          onConfirm={() => setShowErrorModal(false)}
+        />
       )}
     </div>
   );

@@ -1,12 +1,12 @@
-import { Link } from "react-router-dom";
+import CustomButton from "../Button/Button";
 import "./Navbar.scss";
 
 const Navbar = () => {
   return (
     <nav className="navbar">
       <div className="navbar-container">
-        <Link to="/" className="nav-link">Home</Link>
-        <Link to="/add" className="nav-link">Add Game</Link>
+        <CustomButton to="/" variant="secondary">Home</CustomButton>
+        <CustomButton to="/add" variant="secondary">Add Game</CustomButton>
       </div>
     </nav>
   );

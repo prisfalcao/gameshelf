@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getGames } from "../../utils/storage";
-import { Link } from "react-router-dom";
+import CustomButton from "../../components/Button/Button";
 import './Home.scss';
 
 const Home = () => {
@@ -25,9 +25,9 @@ const Home = () => {
             <h3>{game.title}</h3>
             <p>Status: {game.status}</p>
             <div className="card-actions">
-              <Link to={`/game/${game.id}`} className="details-button">
-                Game Details
-              </Link>
+              <CustomButton to={`/game/${game.id}`} variant="secondary">
+                Game details
+              </CustomButton>
             </div>
           </div>
         ))}
