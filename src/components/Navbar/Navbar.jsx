@@ -7,6 +7,7 @@ const Navbar = () => {
       <div className="navbar-container">
         <CustomButton to="/" variant="secondary">Home</CustomButton>
         <CustomButton to="/add" variant="secondary">Add Game</CustomButton>
+        <CustomButton to="/import" variant="secondary">Import Game</CustomButton>
       </div>
     </nav>
   );
