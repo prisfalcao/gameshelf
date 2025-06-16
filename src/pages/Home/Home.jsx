@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getGames } from "../../utils/storage";
-import CustomButton from "../../components/Button/Button";
+import GameCard from "../../components/GameCard/GameCard";
 import './Home.scss';
 
 const Home = () => {
@@ -20,16 +20,7 @@ const Home = () => {
       <h1>My Game Shelf</h1>
       <div className="game-grid">
         {games.map((game) => (
-          <div className="game-card" key={game.id}>
-            <img src={game.cover} alt={game.title} />
-            <h3>{game.title}</h3>
-            <p>Status: {game.status}</p>
-            <div className="card-actions">
-              <CustomButton to={`/game/${game.id}`} variant="secondary">
-                Game details
-              </CustomButton>
-            </div>
-          </div>
+          <GameCard key={game.id} game={game} />
         ))}
       </div>
     </div>
