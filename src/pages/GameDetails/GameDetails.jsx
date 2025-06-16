@@ -90,10 +90,8 @@ const GameDetails = () => {
           onConfirm={() => setShowSuccessModal(false)}
         />
       )}
-
-
       {!isEditing ? (
-        <div className="game-card">
+        <div className="">
           <div className="game-info">
             <img src={game.cover} alt={game.title} />
             <p>Title: {game.title}</p>

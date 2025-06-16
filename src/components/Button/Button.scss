@@ -1,3 +1,11 @@
+.custom-button,
+.custom-button:visited,
+.custom-button:hover,
+.custom-button:active {
+  text-decoration: none;
+  display: inline-block;
+}
+
 .custom-button {
   padding: 0.5rem 1rem;
   border: none;
@@ -14,7 +22,7 @@
       background-color: #27ae60;
     }
   }
-  
+
   &.primary {
     background-color: #3b82f6;
     color: white;
