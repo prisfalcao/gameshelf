@@ -15,6 +15,8 @@ const GameDetails = () => {
   const [showSuccess, setShowSuccess] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+
 
   useEffect(() => {
     const foundGame = getGameById(id);
@@ -66,7 +68,7 @@ const GameDetails = () => {
     const updatedGame = getGameById(id);
     setGame(updatedGame);
     setIsEditing(false);
-    setShowSuccess(true);
+    setShowSuccessModal(true);
     setTimeout(() => setShowSuccess(false), 2000);
   };
 
@@ -81,7 +83,14 @@ const GameDetails = () => {
     <div className="game-details-container">
       <h1>Game details</h1>
 
-      {showSuccess && <p className="success-message">Game updated successfully!</p>}
+      {showSuccessModal && (
+        <Modal
+          type="success"
+          message="Game updated successfully!"
+          onConfirm={() => setShowSuccessModal(false)}
+        />
+      )}
+
 
       {!isEditing ? (
         <div className="game-card">
