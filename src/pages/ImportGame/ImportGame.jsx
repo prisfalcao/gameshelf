@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { addGame, getGames } from "../../utils/storage";
 import { v4 as uuidv4 } from "uuid";
 import CustomButton from "../../components/Button/Button";
@@ -17,7 +17,7 @@ const ImportGame = () => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const navigate = useNavigate();
 
-  const fetchGames = async () => {
+  const fetchGames = useCallback (async () => {
     if (!query.trim()) return;
     try {
       const res = await fetch(
@@ -29,7 +29,7 @@ const ImportGame = () => {
       setError("Failed to fetch games.");
       setResults([]);
     }
-  };
+  }, [query]);
 
   const handleImport = (game) => {
     const existingGames = getGames();
@@ -60,15 +60,13 @@ const ImportGame = () => {
     setShowSuccessModal(true);
   };
 
-  useEffect(() => {
-    const delayDebounce = setTimeout(() => {
-      if (query.trim()) {
-        fetchGames();
-      }
-    }, 400);
+ useEffect(() => {
+  const delayDebounce = setTimeout(() => {
+    fetchGames();
+  }, 400);
 
-    return () => clearTimeout(delayDebounce);
-  }, [query]);
+  return () => clearTimeout(delayDebounce);
+}, [fetchGames]);
 
   return (
     <div className="import-game-container">
