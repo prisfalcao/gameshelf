@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { addGame, getGames } from "../../utils/storage";
 import { v4 as uuidv4 } from "uuid";
 import CustomButton from "../../components/Button/Button";
 import "./ImportGame.scss";
 import Modal from "../../components/Modal/Modal";
 import { useNavigate } from "react-router-dom";
+import GameCard from "../../components/GameCard/GameCard";
 
 const ImportGame = () => {
   const [query, setQuery] = useState("");
@@ -16,7 +17,7 @@ const ImportGame = () => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const navigate = useNavigate();
 
-  const fetchGames = async () => {
+  const fetchGames = useCallback (async () => {
     if (!query.trim()) return;
     try {
       const res = await fetch(
@@ -28,13 +29,13 @@ const ImportGame = () => {
       setError("Failed to fetch games.");
       setResults([]);
     }
-  };
+  }, [query]);
 
   const handleImport = (game) => {
     const existingGames = getGames();
 
     const alreadyExists = existingGames.some(
-        (g) => g.rawgId === game.id
+      (g) => g.rawgId === game.id
     );
 
     if (alreadyExists) {
@@ -59,6 +60,14 @@ const ImportGame = () => {
     setShowSuccessModal(true);
   };
 
+ useEffect(() => {
+  const delayDebounce = setTimeout(() => {
+    fetchGames();
+  }, 400);
+
+  return () => clearTimeout(delayDebounce);
+}, [fetchGames]);
+
   return (
     <div className="import-game-container">
       <h1>Import game from RAWG API</h1>
@@ -77,14 +86,14 @@ const ImportGame = () => {
 
       {showSuccessModal && (
         <Modal
-            type="success"
-            message="Game imported successfully!"
-            onConfirm={() => {
+          type="success"
+          message="Game imported successfully!"
+          onConfirm={() => {
             setShowSuccessModal(false);
             navigate("/");
-            }}
+          }}
         />
-        )}
+      )}
 
 
       <div className="status-dropdown">
@@ -103,39 +112,46 @@ const ImportGame = () => {
       <div className="platform-dropdown">
         <label>Platform:</label>
         <select
-            value={selectedPlatform}
-            onChange={(e) => setSelectedPlatform(e.target.value)}
+          value={selectedPlatform}
+          onChange={(e) => setSelectedPlatform(e.target.value)}
         >
-            <option value="Xbox One">Xbox One</option>
-            <option value="Xbox Series X">Xbox Series X</option>
-            <option value="PlayStation 3">PlayStation 3</option>
-            <option value="PlayStation 4">PlayStation 4</option>
-            <option value="PlayStation 5">PlayStation 5</option>
-            <option value="SNES">SNES</option>
-            <option value="Nintendo Game Boy">Nintendo Game Boy</option>
-            <option value="Nintendo Switch">Nintendo Switch</option>
-            <option value="Nintendo Switch 2">Nintendo Switch 2</option>
-            <option value="PC">PC</option>
-            <option value="Other">Other</option>
+          <option value="Xbox One">Xbox One</option>
+          <option value="Xbox Series X">Xbox Series X</option>
+          <option value="PlayStation 3">PlayStation 3</option>
+          <option value="PlayStation 4">PlayStation 4</option>
+          <option value="PlayStation 5">PlayStation 5</option>
+          <option value="SNES">SNES</option>
+          <option value="Nintendo Game Boy">Nintendo Game Boy</option>
+          <option value="Nintendo Switch">Nintendo Switch</option>
+          <option value="Nintendo Switch 2">Nintendo Switch 2</option>
+          <option value="PC">PC</option>
+          <option value="Other">Other</option>
         </select>
-        </div>
+      </div>
 
       {error && <p className="error-message">{error}</p>}
       {success && <p className="success-message">{success}</p>}
 
       <div className="results">
-        {results.map((game) => (
-          <div key={game.id} className="game-card">
-            <img src={game.background_image} alt={game.name} />
-            <div className="info">
-              <p><strong>{game.name}</strong></p>
-              <p>Released: {game.released || "Unknown"}</p>
-              <CustomButton onClick={() => handleImport(game)} variant="success">
-                Import
-              </CustomButton>
+        {results.map((game) => {
+          const fakeGame = {
+            id: game.id,
+            title: game.name,
+            cover: game.background_image,
+            status: gameStatus,
+            platform: selectedPlatform,
+          };
+
+          return (
+            <div key={game.id}>
+              <GameCard game={fakeGame} showDetailsButton={false}>
+                <CustomButton onClick={() => handleImport(game)} variant="success">
+                  Import
+                </CustomButton>
+              </GameCard>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
