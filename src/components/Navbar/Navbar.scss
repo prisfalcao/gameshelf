@@ -1,44 +1,104 @@
 .navbar {
-  background-color: #1e293b;
-  color: white;
-  padding: 1rem 2rem;
+  background-color: #07224B;
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
+  top: 0; left: 0; right: 0;
+  height: 116px;
+  padding: 1px 35px 1px 40px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
   z-index: 1000;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
 
-  .navbar-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-  }
+.navbar-container {
+  position: relative;
+  max-width: 1440px;
+  height: 100%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
-  .custom-button {
-    background: transparent;
-    border: none;
-    color: white;
-    font-weight: 500;
-    margin: 0 1rem;
-    text-decoration: none;
-    cursor: pointer;
-    transition: color 0.3s ease;
+.navbar-links {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 55px;
+  list-style: none;
+  margin: 0; padding: 0;
+}
 
-    &:hover {
-      color: #122b4b;
-    }
+.navbar-links a {
+  color: #f8fafc;
+  text-decoration: none;
+  font-weight: 500;
+  font-family: 'Jersey 10', sans-serif;
+  font-size: 24px;
+  transition: color 0.2s;
+}
 
-    &.active {
-      border-bottom: 2px solid #60a5fa;
-    }
-  }
+.navbar-links a:hover {
+  color: #60a5fa;
+}
 
+.navbar-logo img {
+  height: 80px;
+}
+
+.navbar-search {
+  margin-left: 24px;
+  position: relative;
+  display: flex;
+}
+
+.navbar-search input {
+  width: 300px;
+  padding: 0.4rem 1rem;
+  border: none;
+  border-radius: 20px;
+  outline: none;
+}
+
+.navbar-search button {
+  position: absolute;
+  right: 0.6rem;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  font-size: 1.2rem;
+  color: #64748b;
+  cursor: pointer;
+}
+
+.navbar-search button:hover {
+  color: #1e40af;
 }
 
 body {
-  padding-top: 70px;
+  padding-top: 116px;
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    height: auto;
+    padding: 1rem;
+  }
+
+  .navbar-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .navbar-links {
+    position: static;
+    transform: none;
+    width: 100%;
+    justify-content: space-around;
+  }
+
+  .navbar-search input {
+    width: 100%;
+  }
 }
