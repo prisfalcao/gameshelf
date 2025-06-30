@@ -1,59 +1,74 @@
+body {
+  margin: 0;
+  padding-top: 116px;
+}
+
 .navbar {
   background-color: #07224B;
   position: fixed;
-  top: 0; left: 0; right: 0;
+  top: 0;
+  left: 0;
+  right: 0;
   height: 116px;
-  padding: 1px 35px 1px 40px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;  
+  padding-left: 160px;
 }
 
-.navbar-container {
-  position: relative;
-  max-width: 1440px;
-  height: 100%;
-  margin: 0 auto;
+.navbar-inner {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+}
+
+.navbar-logo {
+  display: inline-block;
+  line-height: 0;
+  margin-right: 55px;
+}
+
+.navbar-logo img {
+  display: block;
+  width: 110px;
+  height: 93px;
 }
 
 .navbar-links {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
   display: flex;
   gap: 55px;
+  margin: 0;
+  padding: 0;
   list-style: none;
-  margin: 0; padding: 0;
 }
 
 .navbar-links a {
   color: #f8fafc;
+  font: 500 24px 'Jersey 10', sans-serif;
   text-decoration: none;
-  font-weight: 500;
-  font-family: 'Jersey 10', sans-serif;
-  font-size: 24px;
-  transition: color 0.2s;
+  transition: color 0.2s ease-in-out;
 }
 
 .navbar-links a:hover {
-  color: #60a5fa;
-}
-
-.navbar-logo img {
-  height: 80px;
+  color: #60A5FA;
 }
 
 .navbar-search {
-  margin-left: 24px;
+  margin-left: 55px;
   position: relative;
+  width: 556px;
+  height: 26px;
   display: flex;
+  align-items: center;
 }
 
 .navbar-search input {
-  width: 300px;
-  padding: 0.4rem 1rem;
+  width: 100%;
+  height: 100%;
+  background: #ffffff;
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+  padding-left: 12px;
+  padding-right: 40px;
   border: none;
   border-radius: 20px;
   outline: none;
@@ -61,41 +76,44 @@
 
 .navbar-search button {
   position: absolute;
-  right: 0.6rem;
   top: 50%;
+  right: 12px;
   transform: translateY(-50%);
-  border: none;
+  width: 20px;
+  height: 20px;
   background: transparent;
-  font-size: 1.2rem;
-  color: #64748b;
+  border: none;
   cursor: pointer;
-}
-
-.navbar-search button:hover {
-  color: #1e40af;
-}
-
-body {
-  padding-top: 116px;
+  color: #07224B;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 @media (max-width: 768px) {
   .navbar {
     height: auto;
-    padding: 1rem;
+    padding: 16px;
   }
 
   .navbar-inner {
     flex-direction: column;
     align-items: flex-start;
-    gap: 1rem;
+    gap: 16px;
+  }
+
+  .navbar-logo {
+    margin-right: 0;
   }
 
   .navbar-links {
-    position: static;
-    transform: none;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .navbar-search {
+    margin-left: 0;
     width: 100%;
-    justify-content: space-around;
   }
 
   .navbar-search input {

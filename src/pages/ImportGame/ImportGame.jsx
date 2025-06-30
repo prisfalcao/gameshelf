@@ -72,7 +72,7 @@ const ImportGame = () => {
     <div className="import-game-container">
       <h1>Import game from RAWG API</h1>
 
-      <div className="search-bar">
+      <div className="results">
         <input
           type="text"
           placeholder="Search for a game"
