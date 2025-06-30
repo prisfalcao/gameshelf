@@ -1,13 +1,21 @@
 .import-game-container {
-  padding: 32px;
-  background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+
+  h1 {
+    text-align: center;
+    margin-top: 32px;
+    margin-bottom: 32px;
+  }
 
   .search-bar {
     display: flex;
     gap: 10px;
     margin-bottom: 20px;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
 
     input {
       flex: 1;
@@ -25,7 +33,8 @@
 
   .status-dropdown,
   .platform-dropdown {
-    margin-bottom: 16px;
+    max-width: 500px;
+    margin: 0 auto 16px auto;
     text-align: left;
 
     label {
@@ -49,22 +58,21 @@
     }
   }
 
-  .error-message {
-    color: #e74c3c;
+  .error-message,
+  .success-message {
+    text-align: center;
     font-weight: bold;
     margin: 16px 0;
   }
 
-  .success-message {
-    color: #2ecc71;
-    font-weight: bold;
-    margin: 16px 0;
-  }
+  .error-message { color: #e74c3c; }
+  .success-message { color: #2ecc71; }
 
   .results {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 24px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 32px;
+    justify-content: center;
     margin-top: 32px;
   }
 }
