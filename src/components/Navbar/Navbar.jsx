@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./Navbar.scss";
+import "../../styles/Container.scss";
 import logoImg from "../../assets/logoImg.svg";
 
 const Navbar = () => {
@@ -15,8 +16,7 @@ const Navbar = () => {
 
   return (
     <nav className="navbar">
-      <div className="navbar-container">
-
+      <div className="container navbar-inner">
         <Link to="/" className="navbar-logo">
           <img src={logoImg} alt="GameShelf" />
         </Link>
@@ -36,7 +36,6 @@ const Navbar = () => {
           />
           <button type="submit" aria-label="Search">🔍</button>
         </form>
-
       </div>
     </nav>
   );

@@ -16,14 +16,14 @@ const Home = () => {
   }
 
   return (
-    <div className="home-container">
+    <>
       <h1>My Game Shelf</h1>
       <div className="game-grid">
         {games.map((game) => (
           <GameCard key={game.id} game={game} />
         ))}
       </div>
-    </div>
+    </>
   );
 };
 
