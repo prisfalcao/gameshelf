@@ -17,7 +17,7 @@ const ImportGame = () => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const navigate = useNavigate();
 
-  const fetchGames = useCallback (async () => {
+  const fetchGames = useCallback(async () => {
     if (!query.trim()) return;
     try {
       const res = await fetch(
@@ -60,19 +60,19 @@ const ImportGame = () => {
     setShowSuccessModal(true);
   };
 
- useEffect(() => {
-  const delayDebounce = setTimeout(() => {
-    fetchGames();
-  }, 400);
+  useEffect(() => {
+    const delayDebounce = setTimeout(() => {
+      fetchGames();
+    }, 400);
 
-  return () => clearTimeout(delayDebounce);
-}, [fetchGames]);
+    return () => clearTimeout(delayDebounce);
+  }, [fetchGames]);
 
   return (
-    <div className="import-game-container">
+    <div className="page-container import-game-container">
       <h1>Import game from RAWG API</h1>
 
-      <div className="results">
+      <div className="search-bar">
         <input
           type="text"
           placeholder="Search for a game"
@@ -83,6 +83,7 @@ const ImportGame = () => {
           Search
         </CustomButton>
       </div>
+
 
       {showSuccessModal && (
         <Modal

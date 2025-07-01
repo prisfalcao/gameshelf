@@ -78,7 +78,7 @@ const AddGame = () => {
 
   return (
     <div className="add-game-container">
-      <h1>Add game</h1>
+      <h1>Add Game</h1>
 
       {showSuccessModal && (
         <Modal
