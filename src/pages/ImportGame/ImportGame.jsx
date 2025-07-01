@@ -11,10 +11,11 @@ const ImportGame = () => {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
   const [gameStatus, setGameStatus] = useState("Want to play");
   const [selectedPlatform, setSelectedPlatform] = useState("PC");
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
+
   const navigate = useNavigate();
 
   const fetchGames = useCallback(async () => {
@@ -28,6 +29,7 @@ const ImportGame = () => {
     } catch (err) {
       setError("Failed to fetch games.");
       setResults([]);
+      setShowErrorModal(true);
     }
   }, [query]);
 
@@ -35,12 +37,12 @@ const ImportGame = () => {
     const existingGames = getGames();
 
     const alreadyExists = existingGames.some(
-      (g) => g.rawgId === game.id
+      (g) => g.rawgId === game.id && g.platform === selectedPlatform
     );
 
     if (alreadyExists) {
-      setError("This game is already on your shelf.");
-      setSuccess("");
+      setError("This game is already on your shelf for this platform.");
+      setShowErrorModal(true);
       return;
     }
 
@@ -84,7 +86,6 @@ const ImportGame = () => {
         </CustomButton>
       </div>
 
-
       {showSuccessModal && (
         <Modal
           type="success"
@@ -96,6 +97,13 @@ const ImportGame = () => {
         />
       )}
 
+      {showErrorModal && (
+        <Modal
+          type="error"
+          message={error}
+          onConfirm={() => setShowErrorModal(false)}
+        />
+      )}
 
       <div className="status-dropdown">
         <label>Status:</label>
@@ -129,9 +137,6 @@ const ImportGame = () => {
           <option value="Other">Other</option>
         </select>
       </div>
-
-      {error && <p className="error-message">{error}</p>}
-      {success && <p className="success-message">{success}</p>}
 
       <div className="results">
         {results.map((game) => {
