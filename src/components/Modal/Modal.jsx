@@ -36,7 +36,9 @@ const Modal = ({
       <div className="modal-content">
         {title && <h2>{title}</h2>}
         <p>{message}</p>
-        <div className="modal-actions">
+        <div
+          className={`modal-actions ${showCancel ? "multiple-buttons" : "single-button"}`}
+        >
           <CustomButton onClick={onConfirm} variant="primary">
             {confirmText}
           </CustomButton>

@@ -29,7 +29,7 @@ const ImportGame = () => {
     } catch (err) {
       setError("Failed to fetch games.");
       setResults([]);
-      setShowErrorModal(true);
+      setShowErrorModal(true);    
     }
   }, [query]);
 
@@ -60,6 +60,7 @@ const ImportGame = () => {
     addGame(newGame);
     setError("");
     setShowSuccessModal(true);
+    setQuery("");
   };
 
   useEffect(() => {
@@ -78,13 +79,14 @@ const ImportGame = () => {
         <input
           type="text"
           placeholder="Search for a game"
+          aria-label="Search for a game by name"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
         <CustomButton onClick={fetchGames} variant="primary">
           Search
         </CustomButton>
-      </div>
+      </div>      
 
       {showSuccessModal && (
         <Modal
@@ -101,7 +103,10 @@ const ImportGame = () => {
         <Modal
           type="error"
           message={error}
-          onConfirm={() => setShowErrorModal(false)}
+          onConfirm={() => {
+            setShowErrorModal(false);
+            setError("");
+          }}
         />
       )}
 

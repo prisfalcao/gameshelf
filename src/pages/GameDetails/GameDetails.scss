@@ -6,42 +6,45 @@
   background: #ffffff;
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  text-align: center;
+
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
 
   h1 {
-    font-size: 29px;
+    font-size: 28px;
     margin-bottom: 24px;
-    color: #333;
+    color: #07224b;
     text-align: center;
+    font-weight: bold;
   }
 
   .success-message {
     color: #2ecc71;
     font-weight: bold;
     margin-bottom: 16px;
+    text-align: center;
   }
 
   .game-info {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 12px;
+    gap: 8px;
+    width: 100%;
 
     img {
       max-width: 250px;
       border-radius: 8px;
-      margin-bottom: 24px;
+      margin-bottom: 16px;
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
     }
 
     p {
       font-size: 16px;
-      color: #555;
+      color: #333;
       margin: 4px 0;
+      text-align: center;
     }
   }
 
@@ -49,64 +52,31 @@
     display: flex;
     justify-content: center;
     gap: 16px;
-    margin-top: 32px;
-
-    button {
-      padding: 10px 19px;
-      font-size: 16px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: 0.2s ease;
-    }
-
-    .edit {
-      background-color: #3498db;
-      color: white;
-
-      &:hover {
-        background-color: #2980b9;
-      }
-    }
-
-    .delete {
-      background-color: #e74c3c;
-      color: white;
-
-      &:hover {
-        background-color: #c0392b;
-      }
-    }
-
-    .cancel {
-      background-color: #bdc3c7;
-      color: white;
-
-      &:hover {
-        background-color: #95a5a6;
-      }
-    }
+    margin-top: 24px;
+    flex-wrap: wrap;
   }
 
   form {
-    margin-top: 24px;
+    width: 100%;
     display: flex;
     flex-direction: column;
     gap: 16px;
-    text-align: left;
+    margin-top: 24px;
 
     label {
       font-weight: bold;
-      color: #333;
+      color: #07224b;
       margin-bottom: 4px;
     }
 
     input,
     select {
       padding: 8px;
+      font-size: 16px;
       border: 1px solid #ccc;
       border-radius: 6px;
-      font-size: 16px;
+      width: 100%;
+      box-sizing: border-box;
 
       &:focus {
         border-color: #3498db;
@@ -114,11 +84,18 @@
       }
     }
 
+    .error-message {
+      color: #e74c3c;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
     .actions {
       display: flex;
       justify-content: flex-end;
       gap: 16px;
       margin-top: 16px;
+      flex-wrap: wrap;
     }
   }
 
@@ -138,47 +115,15 @@
       background: #fff;
       padding: 32px;
       border-radius: 10px;
-      text-align: center;
       max-width: 400px;
       width: 90%;
+      text-align: center;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 
       p {
         margin-bottom: 24px;
         color: #333;
         font-size: 18px;
-      }
-
-      .modal-actions {
-        display: flex;
-        justify-content: space-between;
-
-        button {
-          padding: 10px 19px;
-          font-size: 16px;
-          border: none;
-          border-radius: 6px;
-          cursor: pointer;
-          transition: background-color 0.2s;
-
-          &.delete {
-            background-color: #e74c3c;
-            color: white;
-
-            &:hover {
-              background-color: #c0392b;
-            }
-          }
-
-          &.cancel {
-            background-color: #bdc3c7;
-            color: white;
-
-            &:hover {
-              background-color: #95a5a6;
-            }
-          }
-        }
       }
     }
   }

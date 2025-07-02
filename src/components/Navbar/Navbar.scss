@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  padding-top: 116px;
+  padding-top: 130px;
 }
 
 .navbar {
@@ -11,19 +11,14 @@ body {
   right: 0;
   height: 116px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  z-index: 1000;  
-  padding-left: 160px;
+  z-index: 1000;
+  padding: 0 40px;
 }
 
 .navbar-inner {
   display: flex;
   align-items: center;
-}
-
-.navbar-logo {
-  display: inline-block;
-  line-height: 0;
-  margin-right: 55px;
+  justify-content: center;
 }
 
 .navbar-logo img {
@@ -35,88 +30,73 @@ body {
 .navbar-links {
   display: flex;
   gap: 55px;
-  margin: 0;
-  padding: 0;
   list-style: none;
-}
+  margin: 0;
+  padding: 20px 40px;
 
-.navbar-links a {
-  color: #f8fafc;
-  font: 500 24px 'Jersey 10', sans-serif;
-  text-decoration: none;
-  transition: color 0.2s ease-in-out;
-}
+  a {
+    color: #f8fafc;
+    font: 500 24px 'Jersey 10', sans-serif;
+    text-decoration: none;
+    transition: color 0.2s ease-in-out;
 
-.navbar-links a:hover {
-  color: #60A5FA;
+    &:hover {
+      color: #60A5FA;
+    }
+  }
 }
 
 .navbar-search {
-  margin-left: 55px;
   position: relative;
-  width: 556px;
-  height: 26px;
+  width: 400px;
+  height: 40px;
   display: flex;
   align-items: center;
-}
 
-.navbar-search input {
-  width: 100%;
-  height: 100%;
-  background: #ffffff;
-  font-family: 'Poppins', sans-serif;
-  font-size: 16px;
-  line-height: 24px;
-  padding-left: 12px;
-  padding-right: 40px;
-  border: none;
-  border-radius: 20px;
-  outline: none;
-}
+  input {
+    width: 100%;
+    height: 100%;
+    background: #ffffff;
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    padding: 0 40px 0 12px;
+    border: none;
+    border-radius: 20px;
+    outline: none;
+  }
 
-.navbar-search button {
-  position: absolute;
-  top: 50%;
-  right: 12px;
-  transform: translateY(-50%);
-  width: 20px;
-  height: 20px;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  color: #07224B;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  button {
+    position: absolute;
+    top: 50%; right: 12px;
+    transform: translateY(-50%);
+    width: 24px; height: 24px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: #2563eb;
+    }
+  }
 }
 
 @media (max-width: 768px) {
-  .navbar {
-    height: auto;
-    padding: 16px;
-  }
-
   .navbar-inner {
     flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
-  }
-
-  .navbar-logo {
-    margin-right: 0;
+    gap: 55px;
+    align-items: center;
   }
 
   .navbar-links {
     flex-direction: column;
-    gap: 16px;
+    gap: 55px;
   }
 
   .navbar-search {
-    margin-left: 0;
-    width: 100%;
-  }
-
-  .navbar-search input {
     width: 100%;
   }
 }

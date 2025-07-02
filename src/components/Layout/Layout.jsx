@@ -7,7 +7,7 @@ const Layout = () => {
   return (
     <>
       <Navbar />
-      <main className="container page-container">
+      <main role="main" aria-label="Main content area" className="container page-container">
         <Outlet />
       </main>
     </>

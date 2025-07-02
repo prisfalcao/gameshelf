@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import "./Navbar.scss";
 import "../../styles/Container.scss";
 import logoImg from "../../assets/logoImg.svg";
+import searchIcon from "../../assets/searchIcon.svg";
 
 const Navbar = () => {
   const [query, setQuery] = useState("");
@@ -12,13 +13,14 @@ const Navbar = () => {
     e.preventDefault();
     if (!query.trim()) return;
     navigate(`/?q=${encodeURIComponent(query.trim())}`);
+    setQuery("");
   };
 
   return (
     <nav className="navbar">
       <div className="container navbar-inner">
         <Link to="/" className="navbar-logo">
-          <img src={logoImg} alt="GameShelf" />
+          <img src={logoImg} alt="GameShelf logo" />
         </Link>
 
         <ul className="navbar-links">
@@ -30,11 +32,15 @@ const Navbar = () => {
         <form className="navbar-search" onSubmit={onSubmit}>
           <input
             type="text"
-            placeholder="Busque pelo nome do jogo"
+            placeholder="Search for game name"
+            aria-label="Game search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
-          <button type="submit" aria-label="Search">🔍</button>
+          <button type="submit" aria-label="Search">
+            <img src={searchIcon} alt="" />
+          </button>
+
         </form>
       </div>
     </nav>
