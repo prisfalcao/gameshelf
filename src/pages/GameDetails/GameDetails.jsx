@@ -10,13 +10,12 @@ import "./GameDetails.scss";
 const GameDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+
   const [game, setGame] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-
 
   useEffect(() => {
     const foundGame = getGameById(id);
@@ -65,11 +64,10 @@ const GameDetails = () => {
     }
 
     updateGame({ ...game, ...values });
-    const updatedGame = getGameById(id);
-    setGame(updatedGame);
+    setGame(getGameById(id));
     setIsEditing(false);
     setShowSuccessModal(true);
-    setTimeout(() => setShowSuccess(false), 2000);
+    setSubmitting(false);
   };
 
   const handleDelete = () => {
@@ -77,7 +75,7 @@ const GameDetails = () => {
     navigate("/");
   };
 
-  if (!game) return <p>Loading...</p>;
+  if (!game) return <p aria-live="polite">Loading...</p>;
 
   return (
     <div className="game-details-container">
@@ -90,27 +88,53 @@ const GameDetails = () => {
           onConfirm={() => setShowSuccessModal(false)}
         />
       )}
+
+      {showErrorModal && (
+        <Modal
+          type="error"
+          message="This game already exists on the shelf for this platform."
+          onConfirm={() => setShowErrorModal(false)}
+        />
+      )}
+
+      {showDeleteConfirm && (
+        <Modal
+          message="Are you sure you want to delete this game?"
+          onConfirm={handleDelete}
+          onCancel={() => setShowDeleteConfirm(false)}
+          confirmText="Yes, Delete"
+          cancelText="Cancel"
+          showCancel={true}
+        />
+      )}
+
       {!isEditing ? (
-        <div className="">
-          <div className="game-info">
-            <img src={game.cover} alt={game.title} />
-            <p>Title: {game.title}</p>
-            <p>Status: {game.status}</p>
-            <p>Platform: {game.platform}</p>
-            <p>Release Year: {game.releaseYear}</p>
-            <p>
-              Start Date:{" "}
-              {game.startDate
-                ? game.startDate.split("-").reverse().join("/")
-                : "Not started yet"}
-            </p>
-          </div>
+        <div className="game-info">
+          <img src={game.cover} alt={`Cover for ${game.title}`} />
+          <p>Title: {game.title}</p>
+          <p>Status: {game.status}</p>
+          <p>Platform: {game.platform}</p>
+          <p>Release Year: {game.releaseYear}</p>
+          <p>
+            Start Date:{" "}
+            {game.startDate
+              ? game.startDate.split("-").reverse().join("/")
+              : "Not started yet"}
+          </p>
 
           <div className="actions">
-            <CustomButton onClick={() => setIsEditing(true)} variant="primary">
+            <CustomButton
+              onClick={() => setIsEditing(true)}
+              variant="primary"
+              aria-label="Edit game"
+            >
               Edit game
             </CustomButton>
-            <CustomButton onClick={() => setShowDeleteConfirm(true)} variant="danger">
+            <CustomButton
+              onClick={() => setShowDeleteConfirm(true)}
+              variant="danger"
+              aria-label="Delete game"
+            >
               Delete
             </CustomButton>
           </div>
@@ -130,16 +154,16 @@ const GameDetails = () => {
         >
           {({ isSubmitting }) => (
             <Form className="edit-form">
-              <label>Title:</label>
-              <Field type="text" name="title" />
+              <label htmlFor="title">Title:</label>
+              <Field type="text" name="title" id="title" />
               <ErrorMessage name="title" component="div" className="error-message" />
 
-              <label>Cover URL:</label>
-              <Field type="text" name="cover" />
+              <label htmlFor="cover">Cover URL:</label>
+              <Field type="text" name="cover" id="cover" />
               <ErrorMessage name="cover" component="div" className="error-message" />
 
-              <label>Status:</label>
-              <Field as="select" name="status">
+              <label htmlFor="status">Status:</label>
+              <Field as="select" name="status" id="status">
                 <option value="Want to play">Want to Play</option>
                 <option value="Playing">Playing</option>
                 <option value="Played">Played</option>
@@ -147,8 +171,8 @@ const GameDetails = () => {
               </Field>
               <ErrorMessage name="status" component="div" className="error-message" />
 
-              <label>Platform:</label>
-              <Field as="select" name="platform">
+              <label htmlFor="platform">Platform:</label>
+              <Field as="select" name="platform" id="platform">
                 <option value="">Select Platform</option>
                 <option value="Xbox One">Xbox One</option>
                 <option value="Xbox Series X">Xbox Series X</option>
@@ -164,55 +188,29 @@ const GameDetails = () => {
               </Field>
               <ErrorMessage name="platform" component="div" className="error-message" />
 
-              <label>Release Year:</label>
-              <Field
-                type="number"
-                name="releaseYear"
-                min="1970"
-                max={new Date().getFullYear()}
-                onInput={(e) => {
-                  if (e.target.value.length > 4) {
-                    e.target.value = e.target.value.slice(0, 4);
-                  }
-                }}
-              />
+              <label htmlFor="releaseYear">Release Year:</label>
+              <Field type="number" name="releaseYear" id="releaseYear" />
               <ErrorMessage name="releaseYear" component="div" className="error-message" />
 
-              <ErrorMessage name="releaseYear" component="div" className="error-message" />
-
-              <label>Start Date:</label>
-              <Field type="date" name="startDate" />
+              <label htmlFor="startDate">Start Date:</label>
+              <Field type="date" name="startDate" id="startDate" />
               <ErrorMessage name="startDate" component="div" className="error-message" />
 
               <div className="actions">
                 <CustomButton type="submit" variant="primary" disabled={isSubmitting}>
                   Save Changes
                 </CustomButton>
-                <CustomButton type="button" variant="secondary" onClick={() => setIsEditing(false)}>
+                <CustomButton
+                  type="button"
+                  variant="secondary"
+                  onClick={() => setIsEditing(false)}
+                >
                   Cancel
                 </CustomButton>
               </div>
             </Form>
           )}
         </Formik>
-      )}
-
-      {showDeleteConfirm && (
-        <Modal
-          message="Are you sure you want to delete this game?"
-          onConfirm={handleDelete}
-          onCancel={() => setShowDeleteConfirm(false)}
-          confirmText="Yes, Delete"
-          cancelText="Cancel"
-          showCancel={true}
-        />
-      )}
-
-      {showErrorModal && (
-        <Modal
-          message="This game already exists on the shelf for this platform."
-          onConfirm={() => setShowErrorModal(false)}
-        />
       )}
     </div>
   );

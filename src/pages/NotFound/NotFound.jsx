@@ -1,13 +1,16 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import CustomButton from "../../components/Button/Button";
 import "./NotFound.scss";
+import logoNotFound from "../../assets/logoNotFound.svg";
 
 const NotFound = () => {
   return (
-    <div className="not-found-container">
+    <div className="not-found-container" role="main">
       <h1>404</h1>
+      <img src={logoNotFound} alt="GameShelf logo" />
       <p>Oops! The page you're looking for doesn't exist.</p>
-      <Link to="/">Go back to Home</Link>
+      <CustomButton to="/" variant="dark">
+        Go back to Home
+      </CustomButton>
     </div>
   );
 };

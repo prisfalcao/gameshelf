@@ -16,7 +16,6 @@ const AddGame = () => {
     title: Yup.string()
       .required("Title is required")
       .max(100, "Maximum 100 characters"),
-
     cover: Yup.string()
       .required("Cover URL is required")
       .test(
@@ -25,25 +24,22 @@ const AddGame = () => {
         (value) =>
           /^https?:\/\//.test(value) || /^data:image\/[a-z]+;base64,/.test(value)
       ),
-
-    platform: Yup.string()
-      .required("Platform is required"),
-
-    status: Yup.string()
-      .required("Status is required"),
-
+    platform: Yup.string().required("Platform is required"),
+    status: Yup.string().required("Status is required"),
     releaseYear: Yup.number()
       .typeError("Release Year must be a number")
       .required("Release Year is required")
       .min(1970, "Year must be after 1970")
       .max(currentYear, `Year cannot be after ${currentYear}`),
-
     startDate: Yup.date()
       .required("Start Date is required")
       .max(new Date(), "Start Date cannot be in the future"),
   });
 
-  const handleSubmit = (values, { setSubmitting, setErrors, resetForm }) => {
+  const [showSuccessModal, setShowSuccessModal] = React.useState(false);
+  const [showErrorModal, setShowErrorModal] = React.useState(false);
+
+  const handleSubmit = (values, { setSubmitting, resetForm }) => {
     const existingGames = getGames();
     const alreadyExists = existingGames.some(
       (game) =>
@@ -73,9 +69,6 @@ const AddGame = () => {
     resetForm();
   };
 
-  const [showSuccessModal, setShowSuccessModal] = React.useState(false);
-  const [showErrorModal, setShowErrorModal] = React.useState(false);
-
   return (
     <div className="add-game-container">
       <h1>Add Game</h1>
@@ -103,7 +96,7 @@ const AddGame = () => {
         initialValues={{
           title: "",
           cover: "",
-          status: "want to play",
+          status: "Want to play",
           platform: "",
           releaseYear: "",
           startDate: "",
@@ -111,18 +104,38 @@ const AddGame = () => {
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
-        {({ isSubmitting }) => (
-          <Form>
-            <label>Title:</label>
-            <Field type="text" name="title" />
+        {({ isSubmitting, errors, touched }) => (
+          <Form role="form">
+            <label htmlFor="title">Title:</label>
+            <Field
+              id="title"
+              name="title"
+              type="text"
+              placeholder="Enter game title"
+              aria-required="true"
+              aria-invalid={errors.title && touched.title ? "true" : "false"}
+            />
             <ErrorMessage name="title" component="div" className="error-message" />
 
-            <label>Cover URL:</label>
-            <Field type="text" name="cover" />
+            <label htmlFor="cover">Cover URL:</label>
+            <Field
+              id="cover"
+              name="cover"
+              type="text"
+              placeholder="https://example.com/image.jpg"
+              aria-required="true"
+              aria-invalid={errors.cover && touched.cover ? "true" : "false"}
+            />
             <ErrorMessage name="cover" component="div" className="error-message" />
 
-            <label>Status:</label>
-            <Field as="select" name="status">
+            <label htmlFor="status">Status:</label>
+            <Field
+              as="select"
+              id="status"
+              name="status"
+              aria-required="true"
+              aria-invalid={errors.status && touched.status ? "true" : "false"}
+            >
               <option value="Want to play">Want to Play</option>
               <option value="Playing">Playing</option>
               <option value="Played">Played</option>
@@ -130,8 +143,14 @@ const AddGame = () => {
             </Field>
             <ErrorMessage name="status" component="div" className="error-message" />
 
-            <label>Platform:</label>
-            <Field as="select" name="platform">
+            <label htmlFor="platform">Platform:</label>
+            <Field
+              as="select"
+              id="platform"
+              name="platform"
+              aria-required="true"
+              aria-invalid={errors.platform && touched.platform ? "true" : "false"}
+            >
               <option value="">Select Platform</option>
               <option value="Xbox One">Xbox One</option>
               <option value="Xbox Series X">Xbox Series X</option>
@@ -147,22 +166,27 @@ const AddGame = () => {
             </Field>
             <ErrorMessage name="platform" component="div" className="error-message" />
 
-            <label>Release Year:</label>
+            <label htmlFor="releaseYear">Release Year:</label>
             <Field
-              type="number"
+              id="releaseYear"
               name="releaseYear"
+              type="number"
+              placeholder="2020"
               min="1970"
               max={currentYear}
-              onInput={(e) => {
-                if (e.target.value.length > 4) {
-                  e.target.value = e.target.value.slice(0, 4);
-                }
-              }}
+              aria-required="true"
+              aria-invalid={errors.releaseYear && touched.releaseYear ? "true" : "false"}
             />
             <ErrorMessage name="releaseYear" component="div" className="error-message" />
 
-            <label>Start Date:</label>
-            <Field type="date" name="startDate" />
+            <label htmlFor="startDate">Start Date:</label>
+            <Field
+              id="startDate"
+              name="startDate"
+              type="date"
+              aria-required="true"
+              aria-invalid={errors.startDate && touched.startDate ? "true" : "false"}
+            />
             <ErrorMessage name="startDate" component="div" className="error-message" />
 
             <CustomButton type="submit" variant="success" disabled={isSubmitting}>

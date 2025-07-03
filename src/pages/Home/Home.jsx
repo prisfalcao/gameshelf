@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { getGames } from "../../utils/storage";
 import GameCard from "../../components/GameCard/GameCard";
-import './Home.scss';
+import "./Home.scss";
 
 const Home = () => {
   const [games, setGames] = useState([]);
@@ -12,7 +12,11 @@ const Home = () => {
   }, []);
 
   if (games.length === 0) {
-    return <p>No games have been added yet.</p>;
+    return (
+      <div className="no-games-message" role="alert" aria-live="polite">
+        <p>No games have been added yet.</p>
+      </div>
+    );
   }
 
   return (

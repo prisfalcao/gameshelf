@@ -10,16 +10,12 @@ const CustomButton = ({
   disabled = false,
 }) => {
   const className = `custom-button ${variant}`;
-  
-  if (to) {
-    return (
-      <Link to={to} className={className}>
-        {children}
-      </Link>
-    );
-  }
 
-  return (
+  return to ? (
+    <Link to={to} className={className} role="button">
+      {children}
+    </Link>
+  ) : (
     <button
       type={type}
       onClick={onClick}

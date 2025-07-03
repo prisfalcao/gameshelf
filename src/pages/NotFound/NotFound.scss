@@ -2,16 +2,21 @@
   text-align: center;
   padding: 32px;
 
+  h1 {
+    font-size: 96px;
+    color: #07224b;
+    margin-bottom: 16px;
+  }
+
+  p {
+    font-size: 18px;
+    color: #555;
+    margin-bottom: 24px;
+  }
+
   img {
     max-width: 300px;
     margin: 32px auto;
     display: block;
-  }
-
-  a {
-    display: inline-block;
-    margin-top: 16px;
-    text-decoration: none;
-    color: #007bff;
-  }
+  }  
 }
