@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import { getGames } from "../../utils/storage";
 import GameCard from "../../components/GameCard/GameCard";
 import "./Home.scss";
+import logoEmptyState from "../../assets/logoEmptyState.svg";
 
 const Home = () => {
   const [games, setGames] = useState([]);
@@ -36,10 +37,12 @@ const Home = () => {
 
       {allGames.length === 0 ? (
         <div className="no-games-message" role="alert" aria-live="polite">
+          <img src={logoEmptyState} alt="GameShelf logo" />
           <p>No games have been added yet.</p>
         </div>
       ) : games.length === 0 ? (
         <div className="no-games-message" role="alert" aria-live="polite">
+          <img src={logoEmptyState} alt="GameShelf logo" />
           <p>No games match your search.</p>
         </div>
       ) : (
