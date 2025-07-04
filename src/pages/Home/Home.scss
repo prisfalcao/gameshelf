@@ -11,4 +11,18 @@
   font-size: 18px;
   color: #333;
   margin-top: 64px;
+
+  img {
+    max-width: 250px;
+    width: 100%;
+    height: auto;
+    margin: 0 auto 24px auto;
+    display: block;
+  }
+
+  p {
+    margin-top: 16px;
+    font-size: 18px;
+    color: #555;
+  }
 }
